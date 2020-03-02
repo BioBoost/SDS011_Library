@@ -10,20 +10,24 @@ namespace SDS011{
     }
 
     void read(void){
-        if (sensor.readable()){
-            sensor.gets((char*) buffer, PACKET_SIZE);   
-            if(buffer[0] != 170){
-                while(buffer[0] !=170){
-                    reshuffleData();
+        bool succesfulRead = false;
+        int headData;
+
+        while(succesfulRead != true){
+            headData = sensor.getc()
+            if(headData == 0xAA){            
+                buffer[0] = headData;            
+                for( int t = 1; t<PACKET_SIZE; t++){
+                    buffer[t] = sensor.getc();
                 }
-            }
-            if(buffer[9] != 171){
-                dataError = true;
+                succesfulRead = true;
+            } else {
+                pc.printf(" \r\n flushing \r\n");
             }
         }
-        //PM25Value = buffer[3] * 256 + buffer[2]/10.0;
-        //PM10Value = buffer[5] *256 + buffer[4]/10.0;
-        //idByte = buffer[6] + buffer[7]*256;
+        PM25Value = buffer[3] * 256 + buffer[2]/10.0;
+        PM10Value = buffer[5] *256 + buffer[4]/10.0;
+        idByte = buffer[6] + buffer[7]*256;
     }
 
     void sendDataToPc(){
@@ -40,17 +44,15 @@ namespace SDS011{
 
     void sleep(void){
     /* TODO */
+    // found a arduino library where you send a command to the sensor and it puts itself in low power modes
     }
 
-    void reshuffleData(){
-        while(buffer[0] != "C0"){
-            /* schuif de hele array met een naar links */
-            int hulp = buffer[0];       //anders verlies van data
-            for(int t=0; t<PACKET_SIZE-1; t++){
-                buffer[t] = buffer[t-1];
-            }
-            buffer[PACKET_SIZE] = hulp;
+    int calculateChecksum(int beginData, int endData,uint8_t Package[]){
+        int checksum=0;
+        for(int t=beginData; t<=endData; t++ ){
+            checksum += Package[t];
         }
+        return checksum%256;  
     }
 
     double getPM25Value(){
@@ -66,10 +68,9 @@ namespace SDS011{
     }
 
     bool correctChecksum(){       
-        if(0){
+        if(calculateChecksum(2,7,buffer) == buffer[8]){
             return true;
         }
-
         return false;
     }
 

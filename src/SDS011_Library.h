@@ -15,7 +15,7 @@ using namespace SDS011{
             void sleep();
     
         private:
-            const unsigned int PACKET_SIZE = 11;
+            const unsigned int PACKET_SIZE = 10;
 
             uint8_t buffer[PACKET_SIZE];
             double PM25Value;
@@ -25,6 +25,6 @@ using namespace SDS011{
             bool dataError = false;
             DigitalIn _pinRXDevice;
             DigitalOut _pinTXDevice;
-            void reshuffleData();
+            void calculateChecksum();
     }
 }
