@@ -1,11 +1,21 @@
-#include SDS011_Library.h
+#include "SDS011_Library.h"
 #include "mbed.h"
 
+/* Local Variables */
+uint8_t buffer[PACKET_SIZE];
+double PM25Value;
+double PM10Value;
+int idByte;
+int receivedCheckSum;
+bool dataError = false;
+
+Serial pc(USBTX, USBRX);
+
+/* Functions */
 namespace SDS011{
-    SDS011(PinName pinTXdevice, PinName pinRXdevice){
-        _pintTXdevice = pintTXdevice;
-        _pintRXdevice = pintRXdevice;
-        Serial sensor(_pinTXdevice,_pinTXdevice);
+    void SDS011(PinName pinTXdevice, PinName pinRXdevice){
+        
+        Serial sensor(pinTXdevice, pinRXdevice);
         sensor.baud(9600);
     }
 
@@ -14,7 +24,7 @@ namespace SDS011{
         int headData;
 
         while(succesfulRead != true){
-            headData = sensor.getc()
+            headData = sensor.getc();
             if(headData == 0xAA){            
                 buffer[0] = headData;            
                 for( int t = 1; t<PACKET_SIZE; t++){
@@ -31,14 +41,14 @@ namespace SDS011{
     }
 
     void sendDataToPc(){
-        Serial pc(USBTX,USBRX);
-        pc.printf("the sensorID is %X %X \r\n", idByte);
+        
+        pc.printf("the sensorID is %X \r\n", idByte);
         pc.printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
         pc.printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
-        if(correctChecksum == true){
+        if(correctChecksum() == true){
             pc.printf("The checksum is true, data is correct");
         } else {
-            pc.printf("The checksum is false, data is corrupt")
+            pc.printf("The checksum is false, data is corrupt");
         }
     }
 

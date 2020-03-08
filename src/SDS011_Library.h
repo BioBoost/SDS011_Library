@@ -1,7 +1,9 @@
 #pragma once
-#include "mbed.h"
 
-using namespace SDS011{
+const unsigned int PACKET_SIZE = 10;
+
+namespace SDS011
+{
     class SDS011
     {
         public:
@@ -13,18 +15,8 @@ using namespace SDS011{
             void sendDataToPc();
             void read();
             void sleep();
-    
+                
         private:
-            const unsigned int PACKET_SIZE = 10;
-
-            uint8_t buffer[PACKET_SIZE];
-            double PM25Value;
-            double PM10Value;
-            int idByte;
-            int receivedCheckSum;
-            bool dataError = false;
-            DigitalIn _pinRXDevice;
-            DigitalOut _pinTXDevice;
             void calculateChecksum();
-    }
-}
+    };
+};
