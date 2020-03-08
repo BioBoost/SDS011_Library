@@ -12,7 +12,7 @@ bool dataError = false;
 Serial pc(USBTX, USBRX);
 
 /* Functions */
-namespace SDS011{
+namespace SDS011_Particle{
     void SDS011(PinName pinTXdevice, PinName pinRXdevice){
         
         Serial sensor(pinTXdevice, pinRXdevice);

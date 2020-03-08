@@ -2,7 +2,7 @@
 
 const unsigned int PACKET_SIZE = 10;
 
-namespace SDS011
+namespace SDS011_Particle
 {
     class SDS011
     {
