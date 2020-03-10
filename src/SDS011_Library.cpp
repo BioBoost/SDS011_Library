@@ -1,5 +1,8 @@
+#include <iostream>
 #include "SDS011_Library.h"
 #include "mbed.h"
+
+using namespace std;
 
 /* Local Variables */
 uint8_t buffer[PACKET_SIZE];
@@ -8,21 +11,21 @@ double PM10Value;
 int idByte;
 int receivedCheckSum;
 bool dataError = false;
-
-Serial pc(USBTX, USBRX);
+PinName TX;
+PinName RX;
+Serial pc(USBTX, USBRX, 9600);
 
 /* Functions */
 namespace SDS011_Particle{
     void SDS011(PinName pinTXdevice, PinName pinRXdevice){
-        
-        Serial sensor(pinTXdevice, pinRXdevice);
-        sensor.baud(9600);
+        TX = pinTXdevice;
+        RX = pinRXdevice;
     }
 
     void read(void){
         bool succesfulRead = false;
         int headData;
-
+        Serial sensor(TX, RX, 9600);
         while(succesfulRead != true){
             headData = sensor.getc();
             if(headData == 0xAA){            
@@ -38,18 +41,6 @@ namespace SDS011_Particle{
         PM25Value = buffer[3] * 256 + buffer[2]/10.0;
         PM10Value = buffer[5] *256 + buffer[4]/10.0;
         idByte = buffer[6] + buffer[7]*256;
-    }
-
-    void sendDataToPc(){
-        
-        pc.printf("the sensorID is %X \r\n", idByte);
-        pc.printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
-        pc.printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
-        if(correctChecksum() == true){
-            pc.printf("The checksum is true, data is correct");
-        } else {
-            pc.printf("The checksum is false, data is corrupt");
-        }
     }
 
     void sleep(void){
@@ -83,6 +74,18 @@ namespace SDS011_Particle{
         }
         return false;
     }
+
+    void sendDataToPc(){
+        
+        pc.printf("the sensorID is %X \r\n", idByte);
+        pc.printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
+        pc.printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
+        if(correctChecksum() == true){
+            pc.printf("The checksum is true, data is correct");
+        } else {
+           pc.printf("The checksum is false, data is corrupt");
+        }
+    }    
 
 }
 
