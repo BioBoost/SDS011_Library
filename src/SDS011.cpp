@@ -1,33 +1,29 @@
 #include "SDS011.h"
 
-
 using namespace std;
 
-/* Local Variables */
-
-Serial pc(USBTX, USBRX, 9600);
 
 /* Functions */
 namespace SDS011_Particle{
-    SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice){
-        TX = pinTXdevice;
-        RX = pinRXdevice;
+    SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
+        :device(pinTXdevice,pinRXdevice,9600)
+    {
+
     }
 
     void SDS011::read(void){
         bool succesfulRead = false;
         int headData;
-        Serial sensor(TX, RX, 9600);
         while(succesfulRead != true){
-            headData = sensor.getc();
+            headData = device.getc();
             if(headData == 0xAA){            
                 buffer[0] = headData;            
                 for( int t = 1; t<PACKET_SIZE; t++){
-                    buffer[t] = sensor.getc();
+                    buffer[t] = device.getc();
                 }
                 succesfulRead = true;
             } else {
-                pc.printf(" \r\n flushing \r\n");
+                printf(" \r\n flushing \r\n");
             }
         }
         PM25Value = buffer[3] * 256 + buffer[2]/10.0;
@@ -69,13 +65,13 @@ namespace SDS011_Particle{
 
     void SDS011::sendDataToPc(){
         
-        pc.printf("the sensorID is %X \r\n", idByte);
-        pc.printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
-        pc.printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
+        printf("the sensorID is %X \r\n", idByte);
+        printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
+        printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
         if(correctChecksum() == true){
-            pc.printf("The checksum is true, data is correct");
+            printf("The checksum is true, data is correct");
         } else {
-           pc.printf("The checksum is false, data is corrupt");
+            printf("The checksum is false, data is corrupt");
         }
     }    
 
