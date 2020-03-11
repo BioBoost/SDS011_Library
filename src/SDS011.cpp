@@ -8,9 +8,10 @@ namespace SDS011_Particle{
 
     }
 
-    void SDS011::read(void){
+    bool SDS011::read(void){
         bool succesfulRead = false;
         int headData;
+
         while(succesfulRead != true){
             headData = device.getc();
             if(headData == 0xAA){            
@@ -18,19 +19,24 @@ namespace SDS011_Particle{
                 for( int t = 1; t<PACKET_SIZE; t++){
                     buffer[t] = device.getc();
                 }
-                succesfulRead = true;
+                if(buffer[9] == 0xAB){
+                    succesfulRead = true;
+                }
+                
             } else {
-                printf(" \r\n flushing \r\n");
+                return false;
             }
         }
         PM25Value = buffer[3] * 256 + buffer[2]/10.0;
         PM10Value = buffer[5] *256 + buffer[4]/10.0;
         idByte = buffer[6] + buffer[7]*256;
+        return correctChecksum();
     }
 
     void SDS011::sleep(void){
     /* TODO */
     // found a arduino library where you send a command to the sensor and it puts itself in low power modes
+    // https://github.com/hackair-project/hackAir-Arduino/blob/master/src/hackair.cpp regel 181
     }
 
     int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){
@@ -62,13 +68,13 @@ namespace SDS011_Particle{
 
     void SDS011::sendDataToPc(){
         
-        printf("the sensorID is %X \r\n", idByte);
+        printf("\r\nThe sensorID is %X \r\n", idByte);
         printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);
         printf("The air contains %.1lf µg/m³ of PM10 \r\n", PM10Value);
         if(correctChecksum() == true){
-            printf("The checksum is true, data is correct");
+            printf("The checksum is true, data is correct \r\n");
         } else {
-            printf("The checksum is false, data is corrupt");
+            printf("The checksum is false, data is corrupt \r\n");
         }
     }    
 

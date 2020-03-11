@@ -13,11 +13,11 @@ namespace SDS011_Particle
         public:    
             double getPM25Value();
             double getPM10Value();
-            int getIdByte();
-            bool correctChecksum();
-            void sendDataToPc();
-            void read();
+            int getIdByte();        
+            void sendDataToPc();           
             void sleep();
+            bool read();
+            bool correctChecksum();
                 
         private:
             int calculateChecksum(int,int,uint8_t[]);
