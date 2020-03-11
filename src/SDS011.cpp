@@ -1,6 +1,6 @@
 #include "SDS011.h"
 
-using namespace std;
+//using namespace std;
 
 
 /* Functions */

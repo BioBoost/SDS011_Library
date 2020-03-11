@@ -1,7 +1,6 @@
 #pragma once
-#include <iostream>
-#include "mbed.h"
 
+#include "mbed.h"
 
 namespace SDS011_Particle
 {
@@ -20,7 +19,7 @@ namespace SDS011_Particle
                 
         private:
             int calculateChecksum(int,int,uint8_t[]);
-            const unsigned int PACKET_SIZE = 10;
+            static const unsigned int PACKET_SIZE = 10;
             uint8_t buffer[PACKET_SIZE];
             double PM25Value;
             double PM10Value;
