@@ -17,12 +17,12 @@ Serial pc(USBTX, USBRX, 9600);
 
 /* Functions */
 namespace SDS011_Particle{
-    void SDS011(PinName pinTXdevice, PinName pinRXdevice){
+    SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice){
         TX = pinTXdevice;
         RX = pinRXdevice;
     }
 
-    void read(void){
+    void SDS011::read(void){
         bool succesfulRead = false;
         int headData;
         Serial sensor(TX, RX, 9600);
@@ -43,12 +43,12 @@ namespace SDS011_Particle{
         idByte = buffer[6] + buffer[7]*256;
     }
 
-    void sleep(void){
+    void SDS011::sleep(void){
     /* TODO */
     // found a arduino library where you send a command to the sensor and it puts itself in low power modes
     }
 
-    int calculateChecksum(int beginData, int endData,uint8_t Package[]){
+    int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){
         int checksum=0;
         for(int t=beginData; t<=endData; t++ ){
             checksum += Package[t];
@@ -56,26 +56,26 @@ namespace SDS011_Particle{
         return checksum%256;  
     }
 
-    double getPM25Value(){
+    double SDS011::getPM25Value(){
         return PM25Value;
     }
 
-    double getPM10Value(){
+    double SDS011::getPM10Value(){
         return PM10Value;
     }
 
-    int getIdByte(){
+    int SDS011::getIdByte(){
         return idByte;
     }
 
-    bool correctChecksum(){       
+    bool SDS011::correctChecksum(){       
         if(calculateChecksum(2,7,buffer) == buffer[8]){
             return true;
         }
         return false;
     }
 
-    void sendDataToPc(){
+    void SDS011::sendDataToPc(){
         
         pc.printf("the sensorID is %X \r\n", idByte);
         pc.printf("The air contains %.1lf µg/m³ of PM2.5 \r\n", PM25Value);

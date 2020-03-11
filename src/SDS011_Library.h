@@ -18,6 +18,6 @@ namespace SDS011_Particle
             void sleep();
                 
         private:
-            void calculateChecksum();
+            int calculateChecksum(int,int,uint8_t[]);
     };
 };
