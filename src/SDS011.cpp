@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SDS011_Library.h"
+#include "SDS011.h"
 #include "mbed.h"
 
 using namespace std;
