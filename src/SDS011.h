@@ -1,5 +1,5 @@
 #pragma once
-#include "PinNames.h"
+#include <iostream>
 
 const unsigned int PACKET_SIZE = 10;
 
@@ -7,9 +7,6 @@ namespace SDS011_Particle
 {
     class SDS011
     {    
-
-
-
 
         public:
             SDS011(PinName pinTXDevice, PinName pinRXDevice);
