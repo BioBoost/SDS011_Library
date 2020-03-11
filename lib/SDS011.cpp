@@ -16,7 +16,7 @@ namespace SDS011_Particle{
             headData = device.getc();
             if(headData == 0xAA){            
                 buffer[0] = headData;            
-                for( int t = 1; t<PACKET_SIZE; t++){
+                for(uint8_t t = 1; t<PACKET_SIZE; t++){
                     buffer[t] = device.getc();
                 }
                 if(buffer[9] == 0xAB){
@@ -37,6 +37,15 @@ namespace SDS011_Particle{
     /* TODO */
     // found a arduino library where you send a command to the sensor and it puts itself in low power modes
     // https://github.com/hackair-project/hackAir-Arduino/blob/master/src/hackair.cpp regel 181
+    
+       // for(uint8_t){}
+    
+    
+    
+    }
+
+    void SDS011::wakeUp(void){
+
     }
 
     int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){
