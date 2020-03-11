@@ -9,6 +9,8 @@ namespace SDS011_Particle
 
         public:
             SDS011(PinName pinTXDevice, PinName pinRXDevice);
+            
+        public:    
             double getPM25Value();
             double getPM10Value();
             int getIdByte();
@@ -19,6 +21,8 @@ namespace SDS011_Particle
                 
         private:
             int calculateChecksum(int,int,uint8_t[]);
+           
+        private:
             static const unsigned int PACKET_SIZE = 10;
             uint8_t buffer[PACKET_SIZE];
             double PM25Value;

@@ -1,8 +1,5 @@
 #include "SDS011.h"
 
-//using namespace std;
-
-
 /* Functions */
 namespace SDS011_Particle{
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
