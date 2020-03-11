@@ -5,14 +5,7 @@
 using namespace std;
 
 /* Local Variables */
-uint8_t buffer[PACKET_SIZE];
-double PM25Value;
-double PM10Value;
-int idByte;
-int receivedCheckSum;
-bool dataError = false;
-PinName TX;
-PinName RX;
+
 Serial pc(USBTX, USBRX, 9600);
 
 /* Functions */
