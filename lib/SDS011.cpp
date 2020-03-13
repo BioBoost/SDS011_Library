@@ -3,9 +3,7 @@
 /* Functions */
 namespace SDS011_Particle{
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
-        :device(pinTXdevice,pinRXdevice,9600)
-    {
-
+        :device(pinTXdevice,pinRXdevice,9600){
     }
 
     bool SDS011::read(void){
@@ -32,20 +30,27 @@ namespace SDS011_Particle{
         idByte = buffer[6] + buffer[7]*256;
         return correctChecksum();
     }
-
-    void SDS011::sleep(void){
-    /* TODO */
-    // found a arduino library where you send a command to the sensor and it puts itself in low power modes
-    // https://github.com/hackair-project/hackAir-Arduino/blob/master/src/hackair.cpp regel 181
-    
-       // for(uint8_t){}
-    
-    
-    
+       
+    bool SDS011::sleep(void){
+        for(uint8_t i =0; i<19; i++){
+            device.putc(sleep_command[i]);
+        }  
+        read();
+        if(buffer[4] == 0x00){
+            return true;
+        }
+        return false;
     }
 
-    void SDS011::wakeUp(void){
-
+    bool SDS011::wakeUp(void){
+        for(uint8_t i =0; i<19; i++){
+            device.putc(wakup_command[i]);
+        }  
+        read();
+        if(buffer[4] == 0x01){
+            return true;
+        }
+        return false;
     }
 
     int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){

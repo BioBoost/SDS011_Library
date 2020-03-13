@@ -15,8 +15,8 @@ namespace SDS011_Particle
             double getPM10Value();
             int getIdByte();        
             void sendDataToPc();           
-            void sleep();
-            void wakeUp();
+            bool sleep();
+            bool wakeUp();
             bool read();
             bool correctChecksum();
                 
@@ -27,6 +27,7 @@ namespace SDS011_Particle
             static const unsigned int PACKET_SIZE = 10;
             uint8_t buffer[PACKET_SIZE];
             uint8_t sleep_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x05, 0xAB};
+            uint8_t wakup_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x06, 0xAB};
      
             double PM25Value;
             double PM10Value;
