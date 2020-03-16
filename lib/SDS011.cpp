@@ -53,6 +53,25 @@ namespace SDS011_Particle{
         return false;
     }
 
+    bool SDS011::setWorkingPeriode(uint8_t periode){
+        /* if periode=0, work continuously */
+        /* else work 30sec and sleep for periode*60 -30sec */
+        periode_command[4] = periode;
+        periode_command[17] = calculateChecksum(2,17,periode_command);
+
+        for(uint8_t i =0; i<19; i++){
+            device.putc(periode_command[i]);
+            printf("\r\n %X \r\n",periode_command[i]);
+        }  
+        read();
+        if(buffer[4] == periode){
+            return true;
+        }
+        return false;
+
+
+    }
+
     int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){
         int checksum=0;
         for(int t=beginData; t<=endData; t++ ){
