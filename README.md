@@ -37,14 +37,15 @@ int main(){
     printf("\r\n--------------------------------------------\n");
     SDS011 sensor(D1,D0);               // uses D1 as TX and D0 as RX
     
-    while(true){
+    while(true){                        // endless loop
         sensor.wakeUp();                // wakes the sensor
+        ThisThread::sleep_for(15000);    // waites for 15 secondes
         while(!sensor.read());          // loops the read if unsuccesfull
         sensor.sendDataToPc();          // sends the data in string format to the pc
         sensor.sleep();                 // puts the sensor to sleep
-        ThisThread::sleep_for(3000);    // waites for 3 secondes
+        ThisThread::sleep_for(45000);   // waites for 45 secondes
     }       
 
 }
-```
+
 
