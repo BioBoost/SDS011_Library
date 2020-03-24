@@ -24,8 +24,8 @@ namespace SDS011_Particle{
                 return false;
             }
         }
-        PM25Value = buffer[3] * 256 + buffer[2]/10.0;
-        PM10Value = buffer[5] *256 + buffer[4]/10.0;
+        PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
+        PM10Value = ((buffer[5] *256) + buffer[4])/10.0;
         idByte = buffer[6] + buffer[7]*256;
         return correctChecksum();
     }
@@ -112,7 +112,14 @@ namespace SDS011_Particle{
         } else {
             printf("The checksum is false, data is corrupt \r\n");
         }
-    }    
+    } 
+
+    void SDS011::printfbuffer(){
+        printf("\r\n this is the buffer:");
+        for(uint8_t t=0;t<PACKET_SIZE;t++){
+            printf(" %x", buffer[t]);
+        }
+    }   
 
 }
 

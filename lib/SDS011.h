@@ -19,6 +19,7 @@ namespace SDS011_Particle
             bool wakeUp();
             bool read();
             bool setWorkingPeriode(uint8_t);
+            void printfbuffer(); 
             
                 
         private:
