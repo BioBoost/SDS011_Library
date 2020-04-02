@@ -10,8 +10,6 @@ namespace SDS011_Particle{
     bool SDS011::read(void){
         bool successfulRead = false;
         int headData;
-        const int NO_HEADER = 0x0AA;
-        const int MAX_TRIES = 20;
         int counter = 0;
 
         while(!successfulRead && !(counter > MAX_TRIES)){
