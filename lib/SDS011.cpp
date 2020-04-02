@@ -55,17 +55,17 @@ namespace SDS011_Particle{
             } 
         }
 
-        bool read_succes = read();
+        // bool read_succes = read();
         
-        if (read_succes == NO_HEADER || read_succes == false){
-            return false;
-        } else {
-            if(buffer[4] == 0x01){
-                return true;
-            } else {
-                return false;
-            }
-        }
+        // if (read_succes == NO_HEADER || read_succes == false){
+        //     return false;
+        // } else {
+        //     if(buffer[4] == 0x01){
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // }
     }
 
     bool SDS011::setWorkingPeriode(uint8_t periode){
