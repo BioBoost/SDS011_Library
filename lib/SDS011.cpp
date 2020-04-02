@@ -10,22 +10,25 @@ namespace SDS011_Particle{
         bool succesfulRead = false;
         int headData;
         int counter = 0;
+        const int MAX_TRIES = 12;
+        const int NO_HEADER = 0x0AA;
         while(succesfulRead != true){
-            if (device.readable()) {
-                headData = device.getc();
-                if(headData == 0xAA){            
-                    buffer[0] = headData;          
-                    for(uint8_t t = 1; t<PACKET_SIZE; t++){
-                        buffer[t] = device.getc();
-                    }
-                    if(buffer[9] == 0xAB){
-                        succesfulRead = true;
-                    }
-                } else {
-                    return false;
+            headData = device.getc();
+            if(headData == 0xAA){            
+                buffer[0] = headData;          
+                for(uint8_t t = 1; t<PACKET_SIZE; t++){
+                    buffer[t] = device.getc();
+                }
+                if(buffer[9] == 0xAB){
+                    succesfulRead = true;
                 }
             } else {
-                return false;
+                if (counter > MAX_TRIES) {
+                    return NO_HEADER;
+                } else {
+                    counter ++
+                    return false;
+                }
             }
         }
         PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
