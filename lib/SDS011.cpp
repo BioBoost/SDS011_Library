@@ -7,16 +7,18 @@ namespace SDS011_Particle{
         device.set_blocking(false);
     }
 
-    bool SDS011::read(void){
+    int SDS011::read(void){
         bool successfulRead = false;
         int headData;
         int counter = 0;
 
         while(!successfulRead && !(counter > MAX_TRIES)){
-            if (device.getc() != EOF) {
+            if (device.readable()) {
                 headData = device.getc();
+            } else {
+                return NO_HEADER;
             }
-            
+
             if(headData == 0xAA){
                 buffer[0] = headData;          
                 for(uint8_t t = 1; t<PACKET_SIZE; t++){

@@ -17,7 +17,7 @@ namespace SDS011_Particle
             void sendDataToPc();           
             bool sleep();
             bool wakeUp();
-            bool read();
+            int read();
             bool setWorkingPeriode(uint8_t);
             void printfbuffer(); 
             
@@ -29,7 +29,7 @@ namespace SDS011_Particle
             static const unsigned int PACKET_SIZE = 10;
             const int NO_HEADER = 0x0AA;
             const int MAX_TRIES = 20;
-            
+
             uint8_t buffer[PACKET_SIZE];
             uint8_t sleep_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x05, 0xAB};
             uint8_t wakeup_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x06, 0xAB};
