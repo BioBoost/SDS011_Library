@@ -16,7 +16,7 @@ namespace SDS011_Particle{
             if (device.readable()) {
                 headData = device.getc();
             } else {
-                return NO_HEADER;
+                return DEVICE_NOT_READABLE;
             }
 
             if(headData == 0xAA){
@@ -27,7 +27,7 @@ namespace SDS011_Particle{
                 if(buffer[9] == 0xAB){
                     successfulRead = true;
                 } else {
-                    return NO_HEADER;
+                    return READ_NOT_SUCCESSFULL;
                 }
             } else {
                 return NO_HEADER;

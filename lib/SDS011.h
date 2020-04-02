@@ -27,7 +27,9 @@ namespace SDS011_Particle
             bool correctChecksum();
         private:
             static const unsigned int PACKET_SIZE = 10;
-            const int NO_HEADER = 0x0AA;
+            const int NO_HEADER = 0xCCC;
+            const int DEVICE_NOT_READABLE = 0xDDD;
+            const int READ_NOT_SUCCESSFULL = 0xEEE;
             const int MAX_TRIES = 20;
 
             uint8_t buffer[PACKET_SIZE];
