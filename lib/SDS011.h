@@ -34,6 +34,7 @@ namespace SDS011_Particle
      
             double PM25Value;
             double PM10Value;
+            const int NO_HEADER = 0x0AA;
             int idByte;
             int receivedCheckSum;
             bool dataError = false;
