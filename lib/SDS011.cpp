@@ -9,6 +9,7 @@ namespace SDS011_Particle{
     bool SDS011::read(void){
         bool succesfulRead = false;
         int headData;
+        int counter = 0;
         while(succesfulRead != true){
             headData = device.getc();
             if(headData == 0xAA){            
@@ -19,8 +20,10 @@ namespace SDS011_Particle{
                 if(buffer[9] == 0xAB){
                     succesfulRead = true;
                 }
-                
+            } else if (counter == 12) {
+                break;
             } else {
+                counter++;
                 return false;
             }
         }
