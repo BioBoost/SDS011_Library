@@ -8,39 +8,28 @@ namespace SDS011_Particle{
     }
 
     bool SDS011::read(void){
-        bool succesfulRead = false;
+        bool successfulRead = false;
         int headData;
+        const int NO_HEADER = 0x0AA;
+        const int MAX_TRIES = 20;
         int counter = 0;
-        const int MAX_TRIES = 30;
 
-        while(!succesfulRead && !(counter > MAX_TRIES)){
-
-            if (device.readable()) {
-                headData = device.getc();
+        while(!successfulRead && !(counter > MAX_TRIES)){
+            headData = device.getc();
+            if(headData == 0xAA){
+                buffer[0] = headData;          
+                for(uint8_t t = 1; t<PACKET_SIZE; t++){
+                    buffer[t] = device.getc();
+                }
+                if(buffer[9] == 0xAB){
+                    successfulRead = true;
+                } else {
+                    return NO_HEADER;
+                }
             } else {
                 return NO_HEADER;
             }
-
-            if(headData == 0xAA){   
-                buffer[0] = headData;          
-                for(uint8_t t = 1; t<PACKET_SIZE; t++){
-                    if (device.readable()) {
-                        buffer[t] = device.getc();
-                    } else {
-                        return NO_HEADER;
-                    }
-                }
-                if(buffer[9] == 0xAB){
-                    succesfulRead = true;
-                }
-            } else {
-                if (counter >= MAX_TRIES) {
-                    return NO_HEADER;
-                } else {
-                    return false;
-                }
-            }
-            counter ++;
+            counter++;
         }
 
         PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
@@ -64,7 +53,7 @@ namespace SDS011_Particle{
         for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
             ThisThread::sleep_for(500);     
             for(uint8_t i =0; i<19; i++){
-                device.putc(wakup_command[i]);
+                device.putc(wakeup_command[i]);
             } 
         }
 
