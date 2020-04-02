@@ -11,6 +11,7 @@ namespace SDS011_Particle{
         int headData;
         int counter = 0;
         const int MAX_TRIES = 30;
+        device.set_blocking(false);
 
         while(!succesfulRead && !(counter > MAX_TRIES)){
             headData = device.getc();
