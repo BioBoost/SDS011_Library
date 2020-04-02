@@ -4,6 +4,7 @@
 namespace SDS011_Particle{
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
+        device.set_blocking(false);
     }
 
     bool SDS011::read(void){
@@ -11,14 +12,23 @@ namespace SDS011_Particle{
         int headData;
         int counter = 0;
         const int MAX_TRIES = 30;
-        device.set_blocking(false);
 
         while(!succesfulRead && !(counter > MAX_TRIES)){
-            headData = device.getc();
+
+            if (device.readable()) {
+                headData = device.getc();
+            } else {
+                return NO_HEADER;
+            }
+
             if(headData == 0xAA){   
                 buffer[0] = headData;          
                 for(uint8_t t = 1; t<PACKET_SIZE; t++){
-                    buffer[t] = device.getc();
+                    if (device.readable()) {
+                        buffer[t] = device.getc();
+                    } else {
+                        return NO_HEADER;
+                    }
                 }
                 if(buffer[9] == 0xAB){
                     succesfulRead = true;
@@ -54,7 +64,7 @@ namespace SDS011_Particle{
         for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
             ThisThread::sleep_for(500);     
             for(uint8_t i =0; i<19; i++){
-            device.putc(wakup_command[i]);
+                device.putc(wakup_command[i]);
             } 
         }
 
