@@ -66,6 +66,7 @@ namespace SDS011_Particle{
         //         return false;
         //     }
         // }
+        return true;
     }
 
     bool SDS011::setWorkingPeriode(uint8_t periode){
