@@ -11,19 +11,20 @@ namespace SDS011_Particle{
         int headData;
         int counter = 0;
         while(succesfulRead != true){
-            headData = device.getc();
-            if(headData == 0xAA){            
-                buffer[0] = headData;          
-                for(uint8_t t = 1; t<PACKET_SIZE; t++){
-                    buffer[t] = device.getc();
+            if (device.readable()) {
+                headData = device.getc();
+                if(headData == 0xAA){            
+                    buffer[0] = headData;          
+                    for(uint8_t t = 1; t<PACKET_SIZE; t++){
+                        buffer[t] = device.getc();
+                    }
+                    if(buffer[9] == 0xAB){
+                        succesfulRead = true;
+                    }
+                } else {
+                    return false;
                 }
-                if(buffer[9] == 0xAB){
-                    succesfulRead = true;
-                }
-            } else if (counter == 12) {
-                break;
             } else {
-                counter++;
                 return false;
             }
         }
