@@ -11,7 +11,6 @@ namespace SDS011_Particle{
         int headData;
         int counter = 0;
         const int MAX_TRIES = 12;
-        const int NO_HEADER = 0x0AA;
         while(succesfulRead != true){
             headData = device.getc();
             if(headData == 0xAA){            
@@ -26,7 +25,7 @@ namespace SDS011_Particle{
                 if (counter > MAX_TRIES) {
                     return NO_HEADER;
                 } else {
-                    counter ++
+                    counter ++;
                     return false;
                 }
             }
@@ -55,12 +54,18 @@ namespace SDS011_Particle{
             device.putc(wakup_command[i]);
             } 
         }  
-         
-        read();
-        if(buffer[4] == 0x01){
-            return true;
+        
+        if (read() == NO_HEADER || read() == false){
+            return false;
+        } else {
+            if(buffer[4] == 0x01){
+                return true;
+            } else {
+                return false;
+            }
         }
-        return false;
+        // read();
+        // return false;
     }
 
     bool SDS011::setWorkingPeriode(uint8_t periode){
