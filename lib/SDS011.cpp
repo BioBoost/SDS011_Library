@@ -53,28 +53,17 @@ namespace SDS011_Particle{
     }
 
     bool SDS011::wakeUp(void){              /* !! DO NOT TOUCH !! */
-        // for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
-        //     ThisThread::sleep_for(500);     
-        //     for(uint8_t i =0; i<19; i++){
-        //         device.putc(wakeup_command[i]);
-        //     } 
-        // }
-
-        device.putc(0x01);
-        device.sync();
-
-        // bool read_succes = read();
-        
-        // if (read_succes == NO_HEADER || read_succes == false){
-        //     return false;
-        // } else {
-        //     if(buffer[4] == 0x01){
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // }
-        return true;
+        for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
+            ThisThread::sleep_for(500);     
+            for(uint8_t i =0; i<19; i++){
+                device.putc(wakeup_command[i]);
+            } 
+        }
+        read();
+        if(buffer[4] == 0x01){
+            return true;
+        }
+        return false;
     }
 
     bool SDS011::setWorkingPeriode(uint8_t periode){
