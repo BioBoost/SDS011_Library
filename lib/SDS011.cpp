@@ -18,7 +18,7 @@ namespace SDS011_Particle{
             } else {
                 return DEVICE_NOT_READABLE;
             }
-
+        // Does not keep looking for the header, looks just ones then returns NO_HEADER
             if(headData == 0xAA){
                 buffer[0] = headData;          
                 for(uint8_t t = 1; t<PACKET_SIZE; t++){
@@ -29,7 +29,7 @@ namespace SDS011_Particle{
                 } else {
                     return READ_NOT_SUCCESSFULL;
                 }
-            } else {
+            } else if (counter >= MAX_TRIES) {
                 return NO_HEADER;
             }
             counter++;
