@@ -46,7 +46,15 @@ namespace SDS011_Particle{
         int headData;
         int counter = 0;
         
+        
         while(!succesfulRead && (counter < MAX_TRIES)){
+            int timoutCounter = 0;
+            while (!device.readable()){
+                if (timoutCounter == HARDWARE_TIMOUT){
+                    return DEVICE_NOT_READABLE;
+                }
+                timoutCounter++;
+            }
             headData = device.getc();
             if(headData == 0xAA){            
                 buffer[0] = headData;          
