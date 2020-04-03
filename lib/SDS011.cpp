@@ -53,12 +53,15 @@ namespace SDS011_Particle{
     }
 
     bool SDS011::wakeUp(void){              /* !! DO NOT TOUCH !! */
-        for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
-            ThisThread::sleep_for(500);     
-            for(uint8_t i =0; i<19; i++){
-                device.putc(wakeup_command[i]);
-            } 
-        }
+        // for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
+        //     ThisThread::sleep_for(500);     
+        //     for(uint8_t i =0; i<19; i++){
+        //         device.putc(wakeup_command[i]);
+        //     } 
+        // }
+
+        device.putc(0x01);
+        device.sync();
 
         // bool read_succes = read();
         
