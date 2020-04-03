@@ -4,31 +4,77 @@
 namespace SDS011_Particle{
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
+        device.set_blocking(false);
     }
 
-    bool SDS011::read(void){
+// int SDS011::read(void){
+//         bool successfulRead = false;
+//         int headData;
+//         int counter = 0;
+
+//         while(!successfulRead && !(counter > MAX_TRIES)){
+//             if (device.readable()) {
+//                 headData = device.getc();
+//             } else {
+//                 return DEVICE_NOT_READABLE;
+//             }
+
+//             if(headData == 0xAA){
+//                 buffer[0] = headData;          
+//                 for(uint8_t t = 1; t<PACKET_SIZE; t++){
+//                     buffer[t] = device.getc();
+//                 }
+//                 if(buffer[9] == 0xAB){
+//                     successfulRead = true;
+//                 } else {
+//                     return READ_NOT_SUCCESSFULL;
+//                 }
+//             } else {
+//                 return NO_HEADER;
+//             }
+//             counter++;
+//         }
+
+//         PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
+//         PM10Value = ((buffer[5] *256) + buffer[4])/10.0;
+//         idByte = buffer[6] + buffer[7]*256;
+//         return correctChecksum();
+//     }
+
+    int SDS011::read(void){
         bool succesfulRead = false;
         int headData;
-        while(succesfulRead != true){
+        int counter = 0;
+        
+        while(!succesfulRead && (counter < MAX_TRIES)){
             headData = device.getc();
             if(headData == 0xAA){            
                 buffer[0] = headData;          
                 for(uint8_t t = 1; t<PACKET_SIZE; t++){
                     buffer[t] = device.getc();
-                }
+                }   
                 if(buffer[9] == 0xAB){
                     succesfulRead = true;
-                }
-                
-            } else {
-                return false;
+                    PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
+                    PM10Value = ((buffer[5] *256) + buffer[4])/10.0;
+                    idByte = buffer[6] + buffer[7]*256;
+                }             
+            } 
+            
+            counter++;
+            if(counter == (MAX_TRIES-1)){
+                return NO_HEADER;
             }
-        }
-        PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
-        PM10Value = ((buffer[5] *256) + buffer[4])/10.0;
-        idByte = buffer[6] + buffer[7]*256;
-        return correctChecksum();
+        }        
+        if(correctChecksum()){
+            return READ_SUCCESSFULL;
+        } else {
+            return READ_NOT_SUCCESSFULL;
+        }      
+        return DEVICE_NOT_READABLE;    
     }
+       
+
        
     bool SDS011::sleep(void){
         for(uint8_t i =0; i<19; i++){
@@ -45,10 +91,9 @@ namespace SDS011_Particle{
         for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
             ThisThread::sleep_for(500);     
             for(uint8_t i =0; i<19; i++){
-            device.putc(wakup_command[i]);
+                device.putc(wakeup_command[i]);
             } 
-        }  
-         
+        }
         read();
         if(buffer[4] == 0x01){
             return true;
@@ -115,11 +160,12 @@ namespace SDS011_Particle{
     } 
 
     void SDS011::printfbuffer(){
-        printf("\r\n this is the buffer:");
+        printf("\r\nThis is the buffer:");
         for(uint8_t t=0;t<PACKET_SIZE;t++){
             printf(" %x", buffer[t]);
         }
+        printf("\r\n");
     }   
 
-}
 
+}
