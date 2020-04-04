@@ -32,7 +32,8 @@ namespace SDS011_Particle
             const int DEVICE_NOT_READABLE = 0xDDD;
             const int READ_NOT_SUCCESSFULL = 0xEEE;
             const int MAX_TRIES = 20;
-            const int HARDWARE_TIMOUT = 130000;
+            const double MAX_TIMOUT = 2.0;
+           
 
             uint8_t buffer[PACKET_SIZE];
             uint8_t sleep_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x05, 0xAB};

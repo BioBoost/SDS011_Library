@@ -1,4 +1,5 @@
 #include "SDS011.h"
+#include <time.h>
 
 /* Functions */
 namespace SDS011_Particle{
@@ -7,40 +8,6 @@ namespace SDS011_Particle{
         device.set_blocking(false);
     }
 
-// int SDS011::read(void){
-//         bool successfulRead = false;
-//         int headData;
-//         int counter = 0;
-
-//         while(!successfulRead && !(counter > MAX_TRIES)){
-//             if (device.readable()) {
-//                 headData = device.getc();
-//             } else {
-//                 return DEVICE_NOT_READABLE;
-//             }
-
-//             if(headData == 0xAA){
-//                 buffer[0] = headData;          
-//                 for(uint8_t t = 1; t<PACKET_SIZE; t++){
-//                     buffer[t] = device.getc();
-//                 }
-//                 if(buffer[9] == 0xAB){
-//                     successfulRead = true;
-//                 } else {
-//                     return READ_NOT_SUCCESSFULL;
-//                 }
-//             } else {
-//                 return NO_HEADER;
-//             }
-//             counter++;
-//         }
-
-//         PM25Value = ((buffer[3] * 256) + buffer[2])/10.0;
-//         PM10Value = ((buffer[5] *256) + buffer[4])/10.0;
-//         idByte = buffer[6] + buffer[7]*256;
-//         return correctChecksum();
-//     }
-
     int SDS011::read(void){
         bool succesfulRead = false;
         int headData;
@@ -48,12 +15,13 @@ namespace SDS011_Particle{
         
         
         while(!succesfulRead && (counter < MAX_TRIES)){
-            int timoutCounter = 0;
+            time_t beginLoop,endloop;
+            time(&beginLoop);
             while (!device.readable()){
-                if (timoutCounter == HARDWARE_TIMOUT){
+                time(&endloop);
+                if (difftime(endloop,beginLoop)>MAX_TIMOUT){
                     return DEVICE_NOT_READABLE;
-                }
-                timoutCounter++;
+                }    
             }
             headData = device.getc();
             if(headData == 0xAA){            
