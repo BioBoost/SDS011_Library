@@ -2,7 +2,12 @@
 #include <time.h>
 
 /* Functions */
+<<<<<<< HEAD
 namespace Particula{
+=======
+namespace Particula {
+
+>>>>>>> 28c777d602ef1ae50c9adc7d7b32db915b02af1d
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
         device.set_blocking(false);
