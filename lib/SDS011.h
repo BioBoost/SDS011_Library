@@ -2,7 +2,7 @@
 
 #include "mbed.h"
 
-namespace SDS011_Particle
+namespace Particula
 {
     class SDS011
     {    

@@ -2,7 +2,8 @@
 #include <time.h>
 
 /* Functions */
-namespace SDS011_Particle{
+namespace Particula {
+
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
         device.set_blocking(false);
