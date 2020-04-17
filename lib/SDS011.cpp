@@ -2,12 +2,8 @@
 #include <time.h>
 
 /* Functions */
-<<<<<<< HEAD
-namespace Particula{
-=======
 namespace Particula {
 
->>>>>>> 28c777d602ef1ae50c9adc7d7b32db915b02af1d
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
         device.set_blocking(false);
@@ -16,8 +12,7 @@ namespace Particula {
     ErrorCodes SDS011::read(void){
         bool succesfulRead = false;
         int headData;
-        int counter = 0;
-        ErrorCodes status;        
+        int counter = 0;      
         
         while(!succesfulRead && (counter < MAX_TRIES)){
             time_t beginLoop,endloop;
@@ -25,7 +20,7 @@ namespace Particula {
             while (!device.readable()){
                 time(&endloop);
                 if (difftime(endloop,beginLoop)>MAX_TIMOUT){
-                    return status;
+                    return DEVICE_NOT_READABLE;
                 }    
             }
             headData = device.getc();
@@ -51,38 +46,41 @@ namespace Particula {
             return READ_SUCCESSFULL;
         } else {
             return READ_NOT_SUCCESSFULL;
-        }      
-        return DEVICE_NOT_READABLE;    
+        }  
+
+        return READ_NOT_SUCCESSFULL;    
     }
        
-
-       
-    bool SDS011::sleep(void){
+    ErrorCodes SDS011::sleep(void){
         for(uint8_t i =0; i<19; i++){
             device.putc(sleep_command[i]);
         }  
-        read();
-        if(buffer[4] == 0x00){
-            return true;
-        }
-        return false;
+        if (read() == READ_SUCCESSFULL){
+            if(buffer[4] == 0x00){
+                return SLEEP_SUCCESSFULL;
+            }
+            return SLEEP_NOT_SUCCESFULL;
+        } 
+        return SLEEP_NOT_SUCCESFULL;
     }
 
-    bool SDS011::wakeUp(void){              /* !! DO NOT TOUCH !! */
+    ErrorCodes SDS011::wakeUp(void){              /* !! DO NOT TOUCH !! */
         for(int t=0; t<2 ;t++){             // is necessary to keep this onholy peace of code working 
             ThisThread::sleep_for(500);     
             for(uint8_t i =0; i<19; i++){
                 device.putc(wakeup_command[i]);
             } 
         }
-        read();
-        if(buffer[4] == 0x01){
-            return true;
+        if(read() == READ_SUCCESSFULL){
+            if(buffer[4] == 0x01){
+                return WAKEUP_SUCCESFULL;
+            }
+            return WAKEUP_NOT_SUCCESFULL;
         }
-        return false;
+        return WAKEUP_NOT_SUCCESFULL;
     }
 
-    bool SDS011::setWorkingPeriode(uint8_t periode){
+    ErrorCodes SDS011::setWorkingPeriode(uint8_t periode){
         /* if periode=0, work continuously */
         /* else work 30sec and sleep for periode*60 -30sec */
         periode_command[4] = periode;
@@ -92,13 +90,13 @@ namespace Particula {
             device.putc(periode_command[i]);
             printf("\r\n %X \r\n",periode_command[i]);
         }  
-        read();
-        if(buffer[4] == periode){
-            return true;
+        if( read() == READ_SUCCESSFULL){
+            if(buffer[4] == periode){
+                return WORKING_PERIODE_SET;
+            }
+            return WORKING_PERIODE_NOT_SET;
         }
-        return false;
-
-
+       
     }
 
     int SDS011::calculateChecksum(int beginData, int endData,uint8_t Package[]){

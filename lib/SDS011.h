@@ -5,12 +5,17 @@
 namespace Particula
 {
     enum ErrorCodes {
-        READ_SUCCESSFULL,
         NO_HEADER,
         DEVICE_NOT_READABLE,
+        READ_SUCCESSFULL,
         READ_NOT_SUCCESSFULL,
-        SLEEP_NOT_SUCCESFUL,
-        WAKEUP_NOT_SUCCESFUL,
+        SLEEP_SUCCESSFULL,
+        SLEEP_NOT_SUCCESFULL,
+        WAKEUP_SUCCESFULL,
+        WAKEUP_NOT_SUCCESFULL,
+        WORKING_PERIODE_SET,
+        WORKING_PERIODE_NOT_SET,
+        
     };
 
     class SDS011
@@ -24,10 +29,10 @@ namespace Particula
             double getPM10Value();
             int getIdByte();        
             void sendDataToPc();           
-            bool sleep();
-            bool wakeUp();
+            ErrorCodes sleep();
+            ErrorCodes wakeUp();
             ErrorCodes read();
-            bool setWorkingPeriode(uint8_t);
+            ErrorCodes setWorkingPeriode(uint8_t);
             void printfbuffer(); 
             
                 
@@ -36,15 +41,9 @@ namespace Particula
             bool correctChecksum();
         private:
             static const unsigned int PACKET_SIZE = 10;
-
-            const int READ_SUCCESSFULL = 0xAAA;
-            const int NO_HEADER = 0xCCC;
-            const int DEVICE_NOT_READABLE = 0xDDD;
-            const int READ_NOT_SUCCESSFULL = 0xEEE;
             
             const int MAX_TRIES = 20;
-            const double MAX_TIMOUT = 2.0;
-           
+            const double MAX_TIMOUT = 2.0;         
 
             uint8_t buffer[PACKET_SIZE];
             uint8_t sleep_command[20] = {0xAA, 0xB4, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x05, 0xAB};
