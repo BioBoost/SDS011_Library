@@ -2,8 +2,17 @@
 
 #include "mbed.h"
 
-namespace SDS011_Particle
+namespace Particula
 {
+    enum ErrorCodes {
+        READ_SUCCESSFULL,
+        NO_HEADER,
+        DEVICE_NOT_READABLE,
+        READ_NOT_SUCCESSFULL,
+        SLEEP_NOT_SUCCESFUL,
+        WAKEUP_NOT_SUCCESFUL,
+    };
+
     class SDS011
     {    
 
@@ -17,7 +26,7 @@ namespace SDS011_Particle
             void sendDataToPc();           
             bool sleep();
             bool wakeUp();
-            int read();
+            ErrorCodes read();
             bool setWorkingPeriode(uint8_t);
             void printfbuffer(); 
             
@@ -27,10 +36,12 @@ namespace SDS011_Particle
             bool correctChecksum();
         private:
             static const unsigned int PACKET_SIZE = 10;
+
             const int READ_SUCCESSFULL = 0xAAA;
             const int NO_HEADER = 0xCCC;
             const int DEVICE_NOT_READABLE = 0xDDD;
             const int READ_NOT_SUCCESSFULL = 0xEEE;
+            
             const int MAX_TRIES = 20;
             const double MAX_TIMOUT = 2.0;
            

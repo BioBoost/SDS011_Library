@@ -2,17 +2,17 @@
 #include <time.h>
 
 /* Functions */
-namespace SDS011_Particle{
+namespace Particula{
     SDS011::SDS011(PinName pinTXdevice, PinName pinRXdevice)
         :device(pinTXdevice,pinRXdevice,9600){
         device.set_blocking(false);
     }
 
-    int SDS011::read(void){
+    ErrorCodes SDS011::read(void){
         bool succesfulRead = false;
         int headData;
         int counter = 0;
-        
+        ErrorCodes status;        
         
         while(!succesfulRead && (counter < MAX_TRIES)){
             time_t beginLoop,endloop;
@@ -20,7 +20,7 @@ namespace SDS011_Particle{
             while (!device.readable()){
                 time(&endloop);
                 if (difftime(endloop,beginLoop)>MAX_TIMOUT){
-                    return DEVICE_NOT_READABLE;
+                    return status;
                 }    
             }
             headData = device.getc();
