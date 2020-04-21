@@ -59,9 +59,9 @@ namespace Particula {
             if(buffer[4] == 0x00){
                 return SLEEP_SUCCESSFULL;
             }
-            return SLEEP_NOT_SUCCESFULL;
+            return SLEEP_NOT_SUCCESSFULL;
         } 
-        return SLEEP_NOT_SUCCESFULL;
+        return SLEEP_NOT_SUCCESSFULL;
     }
 
     ErrorCodes SDS011::wakeUp(void){              /* !! DO NOT TOUCH !! */
@@ -73,11 +73,11 @@ namespace Particula {
         }
         if(read() == READ_SUCCESSFULL){
             if(buffer[4] == 0x01){
-                return WAKEUP_SUCCESFULL;
+                return WAKEUP_SUCCESSFULL;
             }
-            return WAKEUP_NOT_SUCCESFULL;
+            return WAKEUP_NOT_SUCCESSFULL;
         }
-        return WAKEUP_NOT_SUCCESFULL;
+        return WAKEUP_NOT_SUCCESSFULL;
     }
 
     ErrorCodes SDS011::setWorkingPeriode(uint8_t periode){
