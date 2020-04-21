@@ -10,7 +10,7 @@ For using this particle sensor you have to have the following software installed
 * Putty (to test the code)
 
 ```bash
-    -   'git clone    '
+    -   'git clone https://github.com/vives-projectwerk-2-2020/SDS011_Library.git'
     -   'mbed new .' 
     -   'mbed deploy'
     -   'mbed toolchain GCC_ARM'
