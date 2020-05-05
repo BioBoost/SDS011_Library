@@ -26,6 +26,35 @@ Paste the example sketch in your 'main.cpp' file. After compiling it should work
 
 ## Functions
 
+### UML DIAGRAM
+---------------------------------------------
+|                   SDS011                  |
+---------------------------------------------
+| -PACKET_SIZE : const unsigned int         |
+| -MAX_TRIES : const int                    |
+| -MAX_TIMOUT : const double                |
+| -buffer : uint8_t[]                       |
+| -sleep_command : const uint8_t[]          |
+| -wakeup_command : const uint8_t[]         |
+| -periode_command : uint8_t[]              |
+| -PM25Value : double                       |
+| -PM10Value : double                       |
+| -idByte : int                             |
+|-------------------------------------------|
+| +getPM25Value : double                    |
+| +getPM10Value : double                    | 
+| +getIdByte : int                          |
+| +sendDataToPc : void                      |
+| +sleep : ErrorCodes                       |
+| +wakeUp : ErrorCodes                      |
+| +read : ErrorCodes                        |
+| +setWorkingPeriode(uint8_t): ErrorCodes   |
+| +printfbuffer : void                      |
+| -calculateChecksum(int,int,uint8_t) : int |
+| -correctChecksum : bool                   |
+---------------------------------------------
+
+
 ### Functional
 read() : reads the values from the sensor, it returns an error code that secures the correctness of the data
 
