@@ -28,10 +28,10 @@ Paste the example sketch in your 'main.cpp' file. After compiling it should work
 
 ### UML DIAGRAM
 
+```bash
 ---------------------------------------------
 |                   SDS011                  |
 ---------------------------------------------
-
 | -PACKET_SIZE : const unsigned int         |
 | -MAX_TRIES : const int                    |
 | -MAX_TIMOUT : const double                |
@@ -43,7 +43,6 @@ Paste the example sketch in your 'main.cpp' file. After compiling it should work
 | -PM10Value : double                       |
 | -idByte : int                             |
 |-------------------------------------------|
-
 | +getPM25Value : double                    |
 | +getPM10Value : double                    | 
 | +getIdByte : int                          |
@@ -56,7 +55,7 @@ Paste the example sketch in your 'main.cpp' file. After compiling it should work
 | -calculateChecksum(int,int,uint8_t) : int |
 | -correctChecksum : bool                   |
 ---------------------------------------------
-
+```
 
 ### Functional
 read() : reads the values from the sensor, it returns an error code that secures the correctness of the data
